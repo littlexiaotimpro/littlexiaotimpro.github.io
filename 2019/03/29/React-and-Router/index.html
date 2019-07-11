@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion" lang="zh-Hans">
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -82,14 +82,14 @@
 <meta name="description" content="React，它不是一个库，也不是一个框架，而是一个庞大的体系。学习需要一定的成本，因为它颠覆的不仅仅是你对前端的认识，本篇文章不会详细的阐述React是什么，怎么学，怎么用，只会介绍笔者自己在使用时所遇到的一部分坑。。。 详细参考：阮一峰的网络日志。">
 <meta name="keywords" content="React,JavaScript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="React中那些不得不写的坑">
+<meta property="og:title" content="React，挖坑记与填坑记">
 <meta property="og:url" content="http://littlexiaotimpro.github.io/2019/03/29/React-and-Router/index.html">
 <meta property="og:site_name" content="Wiki&#39;s Blog">
 <meta property="og:description" content="React，它不是一个库，也不是一个框架，而是一个庞大的体系。学习需要一定的成本，因为它颠覆的不仅仅是你对前端的认识，本篇文章不会详细的阐述React是什么，怎么学，怎么用，只会介绍笔者自己在使用时所遇到的一部分坑。。。 详细参考：阮一峰的网络日志。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-29T05:46:55.579Z">
+<meta property="og:updated_time" content="2019-04-19T15:06:52.939Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="React中那些不得不写的坑">
+<meta name="twitter:title" content="React，挖坑记与填坑记">
 <meta name="twitter:description" content="React，它不是一个库，也不是一个框架，而是一个庞大的体系。学习需要一定的成本，因为它颠覆的不仅仅是你对前端的认识，本篇文章不会详细的阐述React是什么，怎么学，怎么用，只会介绍笔者自己在使用时所遇到的一部分坑。。。 详细参考：阮一峰的网络日志。">
 
 
@@ -98,7 +98,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
+    scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -126,7 +126,7 @@
 
 
 
-  <title>React中那些不得不写的坑 | Wiki's Blog</title>
+  <title>React，挖坑记与填坑记 | Wiki's Blog</title>
   
 
 
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">React中那些不得不写的坑</h1>
+          <h1 class="post-title" itemprop="name headline">React，挖坑记与填坑记</h1>
         
 
         <div class="post-meta">
@@ -360,6 +360,7 @@
 <h2 id="前后端分离跨域问题"><a href="#前后端分离跨域问题" class="headerlink" title="前后端分离跨域问题"></a>前后端分离跨域问题</h2><p>前后端分离并不只是开发模式，而是web应用的一种架构模式。在多种代码组织的形势下，前后端分离也有不同的状态形式。</p>
 <p>详细参考：<a href="https://segmentfault.com/a/1190000009329474?_ea=2038402" target="_blank" rel="noopener">前后端分离实践（一）</a></p>
 <p>在实现前后端分离开发的过程中，在协议，域名地址，端口出现不同时，跨域访问则成了必须要解决的问题（当然项目整合到同一服务器下除外）。</p>
+<h2 id="前后端跨域访问session失效"><a href="#前后端跨域访问session失效" class="headerlink" title="前后端跨域访问session失效"></a>前后端跨域访问session失效</h2><p>非常令人头疼的一个问题，无法保存用户登录状态。</p>
 <h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><p>使用nginx作为代理服务器，如何安装请自觉百度。</p>
 <p>进入项目目录，安装了git的可以直接点击 <code>Git Bash Here</code>，输入如下命令对react项目进行打包，在项目目录下会生成一个 <strong>bulid</strong> 文件夹，将里面的内容复制到nginx安装目录的html文件下，接下来最重要的就是配置nginx。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run bulid</span><br></pre></td></tr></table></figure>
@@ -372,7 +373,7 @@
 </ul>
 </blockquote>
 <p>出现问题的原因在于react单页面项目在访问路径 <strong>域名/demo</strong> 时的路径下不存在对应的demo.html文件，所以就会出现资源不存在的问题，解决方法如下：</p>
-<p>找到nginx安装目录下的 <strong>conf/nginx.conf</strong> ，配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       端口号;</span><br><span class="line">        server_name  域名;</span><br><span class="line">        root   html;    #访问genmulu</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line"></span><br><span class="line">        #charset koi8-r;</span><br><span class="line"></span><br><span class="line">        #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">        location ~ ^/favicon\.ico$ &#123;</span><br><span class="line">            root html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            try_files $uri $uri/ @fallback; </span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location @fallback&#123;</span><br><span class="line">            rewrite ^.*$ /index.html break; # 重定向至index.html</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>找到nginx安装目录下的 <strong>conf/nginx.conf</strong> ，配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       端口号;</span><br><span class="line">        server_name  域名;</span><br><span class="line">        root   html;    #访问genmulu</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line"></span><br><span class="line">        #charset koi8-r;</span><br><span class="line"></span><br><span class="line">        #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">        location ~ ^/favicon\.ico$ &#123;</span><br><span class="line">            root html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            try_files $uri $uri/ @fallback; </span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location @fallback&#123;</span><br><span class="line">            rewrite ^.*$ /index.html break; # 重定向至index.html</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>详细参考：<a href="https://segmentfault.com/q/1010000011004310" target="_blank" rel="noopener">https://segmentfault.com/q/1010000011004310</a></p>
 <h3 id="页面出现403"><a href="#页面出现403" class="headerlink" title="页面出现403"></a>页面出现403</h3><p>出现原因在于缺少权限，直接在nginx.conf文件的开头加上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user root;</span><br></pre></td></tr></table></figure></p>
 <p>详细参考：石小泉 <a href="https://blog.csdn.net/shiquanqq/article/details/78934653" target="_blank" rel="noopener">nginx部署react，403 forbidden</a></p>
@@ -405,22 +406,6 @@
       
       
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/03/09/sort/" rel="next" title="一些很少提到的知识点">
-                <i class="fa fa-chevron-left"></i> 一些很少提到的知识点
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
       
 
       
@@ -496,7 +481,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -507,7 +492,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -518,7 +503,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -591,7 +576,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前后端分离跨域问题"><span class="nav-number">1.</span> <span class="nav-text">前后端分离跨域问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx"><span class="nav-number">2.</span> <span class="nav-text">nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#页面出现404"><span class="nav-number">2.1.</span> <span class="nav-text">页面出现404</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面出现403"><span class="nav-number">2.2.</span> <span class="nav-text">页面出现403</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Router"><span class="nav-number">3.</span> <span class="nav-text">React-Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#待更新…"><span class="nav-number">4.</span> <span class="nav-text">待更新…</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前后端分离跨域问题"><span class="nav-number">1.</span> <span class="nav-text">前后端分离跨域问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前后端跨域访问session失效"><span class="nav-number">2.</span> <span class="nav-text">前后端跨域访问session失效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx"><span class="nav-number">3.</span> <span class="nav-text">nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#页面出现404"><span class="nav-number">3.1.</span> <span class="nav-text">页面出现404</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面出现403"><span class="nav-number">3.2.</span> <span class="nav-text">页面出现403</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Router"><span class="nav-number">4.</span> <span class="nav-text">React-Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#待更新…"><span class="nav-number">5.</span> <span class="nav-text">待更新…</span></a></li></ol></div>
             
 
           </div>
@@ -724,6 +709,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
