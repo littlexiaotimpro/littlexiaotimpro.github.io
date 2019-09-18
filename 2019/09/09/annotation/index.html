@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,源码,Lombok,">
+  <meta name="keywords" content="Lombok,Java,源码,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="序言不要觉得这个东西没听过就不好用，接受它会让你的代码更加简洁，易于阅读。">
-<meta name="keywords" content="Java,源码,Lombok">
+<meta name="description" content="序言注解在Java编程中使用非常的广，使用频率也非常的高，但多数情况下对于注解，很多人都只是局限于会用，并不知道其原理，写这篇文章的目的就是做学习笔记，记录注解的学习过程。Spring，程序员都听过的开源技术框架，学习其注解的使用场景，和实际效果。Lombok，不要觉得这个东西没听过就不好用，接受它会让你的代码更加简洁，易于阅读。">
+<meta name="keywords" content="Lombok,Java,源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Lombok 学习和使用">
-<meta property="og:url" content="http://littlexiaotimpro.github.io/2019/09/09/Lombok/index.html">
+<meta property="og:title" content="注解的学习和使用">
+<meta property="og:url" content="http://littlexiaotimpro.github.io/2019/09/09/annotation/index.html">
 <meta property="og:site_name" content="Wiki&#39;s Blog">
-<meta property="og:description" content="序言不要觉得这个东西没听过就不好用，接受它会让你的代码更加简洁，易于阅读。">
+<meta property="og:description" content="序言注解在Java编程中使用非常的广，使用频率也非常的高，但多数情况下对于注解，很多人都只是局限于会用，并不知道其原理，写这篇文章的目的就是做学习笔记，记录注解的学习过程。Spring，程序员都听过的开源技术框架，学习其注解的使用场景，和实际效果。Lombok，不要觉得这个东西没听过就不好用，接受它会让你的代码更加简洁，易于阅读。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-09-08T16:00:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lombok 学习和使用">
-<meta name="twitter:description" content="序言不要觉得这个东西没听过就不好用，接受它会让你的代码更加简洁，易于阅读。">
+<meta name="twitter:title" content="注解的学习和使用">
+<meta name="twitter:description" content="序言注解在Java编程中使用非常的广，使用频率也非常的高，但多数情况下对于注解，很多人都只是局限于会用，并不知道其原理，写这篇文章的目的就是做学习笔记，记录注解的学习过程。Spring，程序员都听过的开源技术框架，学习其注解的使用场景，和实际效果。Lombok，不要觉得这个东西没听过就不好用，接受它会让你的代码更加简洁，易于阅读。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://littlexiaotimpro.github.io/2019/09/09/Lombok/">
+  <link rel="canonical" href="http://littlexiaotimpro.github.io/2019/09/09/annotation/">
 
 
 
 
 
-  <title>Lombok 学习和使用 | Wiki's Blog</title>
+  <title>注解的学习和使用 | Wiki's Blog</title>
   
 
 
@@ -265,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://littlexiaotimpro.github.io/2019/09/09/Lombok/">
+    <link itemprop="mainEntityOfPage" href="http://littlexiaotimpro.github.io/2019/09/09/annotation/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wiki">
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Lombok 学习和使用</h1>
+          <h1 class="post-title" itemprop="name headline">注解的学习和使用</h1>
         
 
         <div class="post-meta">
@@ -354,10 +354,10 @@
       
 
       
-        <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><blockquote><p>不要觉得这个东西没听过就不好用，接受它会让你的代码更加简洁，易于阅读。</p>
+        <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><blockquote><p>注解在Java编程中使用非常的广，使用频率也非常的高，但多数情况下对于注解，很多人都只是局限于会用，并不知道其原理，写这篇文章的目的就是做学习笔记，记录注解的学习过程。<br>Spring，程序员都听过的开源技术框架，学习其注解的使用场景，和实际效果。<br>Lombok，不要觉得这个东西没听过就不好用，接受它会让你的代码更加简洁，易于阅读。</p>
 </blockquote>
 <a id="more"></a>
-<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>第一次接触是在2018年实习的时候，当时和几个同事一起日常学习的过程中了解到了这个，当时觉得这个很神奇，通过注解的方式就可以实现实体的构造方法、打印日志等。希望通过本篇文章，系统的学习使用Lombok的注解使用，简化项目，同时了解注解的内部实现，学习其设计模式，了解其结构。</p>
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>了解注解的定义过程，元注解的使用及注解生命周期的设定，学会自定义注解，同时学习主流框架中的常用注解，了解其注解的内部实现，学习其设计模式，了解其结构。</p>
 <h2 id="开始前"><a href="#开始前" class="headerlink" title="开始前"></a>开始前</h2><p>此技术框架以注解的方式使用在项目之中，因此，学习前需要了解关于 Java 注解的一些基础知识。</p>
 <ul>
 <li>元注解</li>
@@ -378,10 +378,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the retention policy.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> the retention policy</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>@Documented<br>Documented,，记录，文档，用于描述其它类型的annotation应该被作为被标注的程序成员的公共API，因此可以被例如javadoc此类的工具文档化。Documented是一个标记注解，没有成员。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Documented &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>@Inherited<br>Inherited 元注解是一个标记注解，@Inherited阐述了某个被标注的类型是被继承的。如果一个使用了@Inherited修饰的annotation类型被用于一个class，则这个annotation将被用于该class的子类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Inherited &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="自定以注解"><a href="#自定以注解" class="headerlink" title="自定以注解"></a>自定以注解</h3><p>了解了以上元注解之后，就可以开始学着自定以注解了，具体的实现流程是 <figure class="highlight plain"><figcaption><span>@interface 注解名 &#123;定义体&#125;``` ，其中自定义注解参数可支持数据类型：</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">- 基本数据类型（int,float,boolean,byte,double,char,long,short)</span><br><span class="line">- String</span><br><span class="line">- Class</span><br><span class="line">- enum</span><br><span class="line">- Annotation</span><br><span class="line">- 以上所有类型的数组</span><br><span class="line"></span><br><span class="line">需要注意的是：</span><br><span class="line">- 注解内部参数值只能是 public 或 Default修饰符所修饰</span><br><span class="line">- 参数类型必须符合可支持的类型</span><br><span class="line"></span><br><span class="line">具体实例，下面会一个一个介绍。</span><br><span class="line"></span><br><span class="line">## 技术点</span><br><span class="line">通过解读的过程，去了解以下几个方面，在学习的时候必须了解Lombok必须结合对应的插件使用：</span><br><span class="line">- 注解的实现原理</span><br><span class="line">- 注解的功能效用</span><br><span class="line">- 注解的使用场景</span><br><span class="line"></span><br><span class="line">### @Data</span><br><span class="line">使用场景：  </span><br><span class="line">在一个存在众多类对象的系统中，部分类型存在多个成员变量，一旦修改其中的某个值，就需要修改其所对应的 `getter` 和 `setter` 方法，这个修改的过程效率极低。Lombok的出现大大提升了开发效益，在创建实体，并构造其内部变量方法时，发挥巨大的效用。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">@Target(&#123;ElementType.TYPE&#125;)</span><br><span class="line">@Retention(RetentionPolicy.SOURCE)</span><br><span class="line">public @interface Data &#123;</span><br><span class="line">    String staticConstructor() default &quot;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="自定以注解"><a href="#自定以注解" class="headerlink" title="自定以注解"></a>自定以注解</h3><p>了解了以上元注解之后，就可以开始学着自定以注解了，具体的实现流程是 <figure class="highlight plain"><figcaption><span>@interface 注解名 &#123;定义体&#125;``` ，其中自定义注解参数可支持数据类型：</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">- 基本数据类型（int,float,boolean,byte,double,char,long,short)</span><br><span class="line">- String</span><br><span class="line">- Class</span><br><span class="line">- enum</span><br><span class="line">- Annotation</span><br><span class="line">- 以上所有类型的数组</span><br><span class="line"></span><br><span class="line">需要注意的是：</span><br><span class="line">- 注解内部参数值只能是 public 或 Default修饰符所修饰</span><br><span class="line">- 参数类型必须符合可支持的类型</span><br><span class="line"></span><br><span class="line">具体实例，下面会一个一个介绍。</span><br><span class="line"></span><br><span class="line">## 具体框架注解学习</span><br><span class="line">通过解读的过程，去了解以下几个方面：</span><br><span class="line">- 注解的实现原理</span><br><span class="line">- 注解的功能效用</span><br><span class="line">- 注解的使用场景</span><br><span class="line"></span><br><span class="line">### Spring</span><br><span class="line">Spring、Spring MVC、Spring Boot、Spring Cloud 等全家桶套餐，作为目前最主流的技术框架，无论是微服务，云架构都有使用。</span><br><span class="line"></span><br><span class="line">#### @Component</span><br><span class="line"></span><br><span class="line">待更新</span><br><span class="line"></span><br><span class="line">### Lombok</span><br><span class="line">开源的异端，使用的时候会觉得和以前的代码风格迥异，不符合其完整性，但使用后又觉得，这是一个非常不错的框架，能够提升开发效益，使用时必须结合相应插件，不然编辑器会自动检测异常。</span><br><span class="line"></span><br><span class="line">#### @Data</span><br><span class="line">使用场景：  </span><br><span class="line">在一个存在众多类对象的系统中，部分类型存在多个成员变量，一旦修改其中的某个值，就需要修改其所对应的 `getter` 和 `setter` 方法，这个修改的过程效率极低。Lombok的出现大大提升了开发效益，在创建实体，并构造其内部变量方法时，发挥巨大的效用。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">@Target(&#123;ElementType.TYPE&#125;)</span><br><span class="line">@Retention(RetentionPolicy.SOURCE)</span><br><span class="line">public @interface Data &#123;</span><br><span class="line">    String staticConstructor() default &quot;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><code>@Data</code> 作为使用最为广泛的注解之一，使用者觉得很方便，但查看源码以后，就会觉得一脸懵逼，在了解了自定义注解的关系之后，可以看出，<code>@Data</code> 注解的作用对象是类、接口（注解）、以及枚举类等，只存在于源文件中，及编译器有效，在编译之后会取消注释。</p>
 <hr>
-<p>参考文章</p>
+<h2 id="待更新"><a href="#待更新" class="headerlink" title=" 待更新"></a> 待更新</h2><p>参考文章</p>
 <p><a href="https://www.cnblogs.com/peida/archive/2013/04/24/3036689.html" target="_blank" rel="noopener">注解：https://www.cnblogs.com/peida/archive/2013/04/24/3036689.html</a></p>
 <p><a href="https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html" target="_blank" rel="noopener">枚举类：https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html</a></p>
 <p><a href="https://projectlombok.org/features/all" target="_blank" rel="noopener">Lombok：https://projectlombok.org/features/all</a></p>
@@ -402,11 +402,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/Lombok/" rel="tag"># Lombok</a>
+          
             <a href="/tags/Java/" rel="tag"># Java</a>
           
             <a href="/tags/源码/" rel="tag"># 源码</a>
-          
-            <a href="/tags/Lombok/" rel="tag"># Lombok</a>
           
         </div>
       
@@ -419,8 +419,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/29/React-and-Router/" rel="next" title="React，挖坑记与填坑记">
-                <i class="fa fa-chevron-left"></i> React，挖坑记与填坑记
+              <a href="/2019/09/09/guava/" rel="next" title="Guava - Google Core Libraries for Java">
+                <i class="fa fa-chevron-left"></i> Guava - Google Core Libraries for Java
               </a>
             
           </div>
@@ -429,8 +429,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/09/09/Generic/" rel="prev" title="理解泛型">
-                理解泛型 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/09/09/Git/" rel="prev" title="Git">
+                Git <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -605,7 +605,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">2.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始前"><span class="nav-number">3.</span> <span class="nav-text">开始前</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#元注解"><span class="nav-number">3.1.</span> <span class="nav-text">元注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定以注解"><span class="nav-number">3.2.</span> <span class="nav-text">自定以注解</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">2.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始前"><span class="nav-number">3.</span> <span class="nav-text">开始前</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#元注解"><span class="nav-number">3.1.</span> <span class="nav-text">元注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定以注解"><span class="nav-number">3.2.</span> <span class="nav-text">自定以注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#待更新"><span class="nav-number">4.</span> <span class="nav-text"> 待更新</span></a></li></ol></div>
             
 
           </div>
