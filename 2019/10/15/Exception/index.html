@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="React,JavaScript,">
+  <meta name="keywords" content="Java,异常,源码,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="React，它不是一个库，也不是一个框架，而是一个庞大的体系。学习需要一定的成本，因为它颠覆的不仅仅是你对前端的认识，本篇文章不会详细的阐述React是什么，怎么学，怎么用，只会介绍笔者自己在使用时所遇到的一部分坑。。。 详细参考：阮一峰的网络日志。">
-<meta name="keywords" content="React,JavaScript">
+<meta name="description" content="异常类型的处理  引言">
+<meta name="keywords" content="Java,异常,源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="React，挖坑记与填坑记">
-<meta property="og:url" content="http://littlexiaotimpro.github.io/2019/03/29/React-and-Router/index.html">
+<meta property="og:title" content="异常类的学习">
+<meta property="og:url" content="http://littlexiaotimpro.github.io/2019/10/15/Exception/index.html">
 <meta property="og:site_name" content="Wiki&#39;s Blog">
-<meta property="og:description" content="React，它不是一个库，也不是一个框架，而是一个庞大的体系。学习需要一定的成本，因为它颠覆的不仅仅是你对前端的认识，本篇文章不会详细的阐述React是什么，怎么学，怎么用，只会介绍笔者自己在使用时所遇到的一部分坑。。。 详细参考：阮一峰的网络日志。">
+<meta property="og:description" content="异常类型的处理  引言">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-19T15:06:52.939Z">
+<meta property="og:updated_time" content="2019-10-14T16:00:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="React，挖坑记与填坑记">
-<meta name="twitter:description" content="React，它不是一个库，也不是一个框架，而是一个庞大的体系。学习需要一定的成本，因为它颠覆的不仅仅是你对前端的认识，本篇文章不会详细的阐述React是什么，怎么学，怎么用，只会介绍笔者自己在使用时所遇到的一部分坑。。。 详细参考：阮一峰的网络日志。">
+<meta name="twitter:title" content="异常类的学习">
+<meta name="twitter:description" content="异常类型的处理  引言">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://littlexiaotimpro.github.io/2019/03/29/React-and-Router/">
+  <link rel="canonical" href="http://littlexiaotimpro.github.io/2019/10/15/Exception/">
 
 
 
 
 
-  <title>React，挖坑记与填坑记 | Wiki's Blog</title>
+  <title>异常类的学习 | Wiki's Blog</title>
   
 
 
@@ -265,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://littlexiaotimpro.github.io/2019/03/29/React-and-Router/">
+    <link itemprop="mainEntityOfPage" href="http://littlexiaotimpro.github.io/2019/10/15/Exception/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wiki">
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">React，挖坑记与填坑记</h1>
+          <h1 class="post-title" itemprop="name headline">异常类的学习</h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T09:53:00+08:00">
-                2019-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-15T00:00:00+08:00">
+                2019-10-15
               </time>
             
 
@@ -317,8 +317,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
+                  <a href="/categories/notebook/" itemprop="url" rel="index">
+                    <span itemprop="name">notebook</span>
                   </a>
                 </span>
 
@@ -354,31 +354,9 @@
       
 
       
-        <p>React，它不是一个库，也不是一个框架，而是一个庞大的体系。学习需要一定的成本，因为它颠覆的不仅仅是你对前端的认识，本篇文章不会详细的阐述React是什么，怎么学，怎么用，只会介绍笔者自己在使用时所遇到的一部分坑。。。</p>
-<p>详细参考：<a href="http://www.ruanyifeng.com/blog/2016/05/react_router.html?utm_source=tool.lu" target="_blank" rel="noopener">阮一峰的网络日志</a>。</p>
-<a id="more"></a>
-<h2 id="前后端分离跨域问题"><a href="#前后端分离跨域问题" class="headerlink" title="前后端分离跨域问题"></a>前后端分离跨域问题</h2><p>前后端分离并不只是开发模式，而是web应用的一种架构模式。在多种代码组织的形势下，前后端分离也有不同的状态形式。</p>
-<p>详细参考：<a href="https://segmentfault.com/a/1190000009329474?_ea=2038402" target="_blank" rel="noopener">前后端分离实践（一）</a></p>
-<p>在实现前后端分离开发的过程中，在协议，域名地址，端口出现不同时，跨域访问则成了必须要解决的问题（当然项目整合到同一服务器下除外）。</p>
-<h2 id="前后端跨域访问session失效"><a href="#前后端跨域访问session失效" class="headerlink" title="前后端跨域访问session失效"></a>前后端跨域访问session失效</h2><p>非常令人头疼的一个问题，无法保存用户登录状态。</p>
-<h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><p>使用nginx作为代理服务器，如何安装请自觉百度。</p>
-<p>进入项目目录，安装了git的可以直接点击 <code>Git Bash Here</code>，输入如下命令对react项目进行打包，在项目目录下会生成一个 <strong>bulid</strong> 文件夹，将里面的内容复制到nginx安装目录的html文件下，接下来最重要的就是配置nginx。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run bulid</span><br></pre></td></tr></table></figure>
-<h3 id="页面出现404"><a href="#页面出现404" class="headerlink" title="页面出现404"></a>页面出现404</h3><p>可能造成问题出现的情况：</p>
-<blockquote>
-<ul>
-<li>刷新当前页面</li>
-<li>回退之前的历史页面</li>
-<li>直接输入地址访问页面</li>
-</ul>
+        <blockquote><p>异常类型的处理</p>
 </blockquote>
-<p>出现问题的原因在于react单页面项目在访问路径 <strong>域名/demo</strong> 时的路径下不存在对应的demo.html文件，所以就会出现资源不存在的问题，解决方法如下：</p>
-<p>找到nginx安装目录下的 <strong>conf/nginx.conf</strong> ，配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       端口号;</span><br><span class="line">        server_name  域名;</span><br><span class="line">        root   html;    #访问genmulu</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line"></span><br><span class="line">        #charset koi8-r;</span><br><span class="line"></span><br><span class="line">        #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">        location ~ ^/favicon\.ico$ &#123;</span><br><span class="line">            root html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            try_files $uri $uri/ @fallback; </span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location @fallback&#123;</span><br><span class="line">            rewrite ^.*$ /index.html break; # 重定向至index.html</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>详细参考：<a href="https://segmentfault.com/q/1010000011004310" target="_blank" rel="noopener">https://segmentfault.com/q/1010000011004310</a></p>
-<h3 id="页面出现403"><a href="#页面出现403" class="headerlink" title="页面出现403"></a>页面出现403</h3><p>出现原因在于缺少权限，直接在nginx.conf文件的开头加上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user root;</span><br></pre></td></tr></table></figure></p>
-<p>详细参考：石小泉 <a href="https://blog.csdn.net/shiquanqq/article/details/78934653" target="_blank" rel="noopener">nginx部署react，403 forbidden</a></p>
-<h2 id="React-Router"><a href="#React-Router" class="headerlink" title="React-Router"></a>React-Router</h2><h2 id="待更新…"><a href="#待更新…" class="headerlink" title="待更新…"></a><em>待更新…</em></h2><hr>
-
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
       
     </div>
     
@@ -395,9 +373,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/React/" rel="tag"># React</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+            <a href="/tags/异常/" rel="tag"># 异常</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
           
         </div>
       
@@ -410,15 +390,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/10/05/Collection/" rel="next" title="集合类源码学习">
+                <i class="fa fa-chevron-left"></i> 集合类源码学习
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/09/09/Generic/" rel="prev" title="理解泛型">
-                理解泛型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -592,7 +572,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前后端分离跨域问题"><span class="nav-number">1.</span> <span class="nav-text">前后端分离跨域问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前后端跨域访问session失效"><span class="nav-number">2.</span> <span class="nav-text">前后端跨域访问session失效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx"><span class="nav-number">3.</span> <span class="nav-text">nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#页面出现404"><span class="nav-number">3.1.</span> <span class="nav-text">页面出现404</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面出现403"><span class="nav-number">3.2.</span> <span class="nav-text">页面出现403</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Router"><span class="nav-number">4.</span> <span class="nav-text">React-Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#待更新…"><span class="nav-number">5.</span> <span class="nav-text">待更新…</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li></ol></div>
             
 
           </div>
