@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/ILogow.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/iam.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/iam.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/ILogo.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="KMP - 字符串匹配算法1. 概述KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的核心是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是通过一个next()函数实现，函数本身包含了模式串的局部匹配信息。 作为必须了解的效率算法之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wiki&#39;s Blog">
+<meta property="og:url" content="http://littlexiaotimpro.github.io/2020/07/22/KMP/index.html">
+<meta property="og:site_name" content="Wiki&#39;s Blog">
+<meta property="og:description" content="KMP - 字符串匹配算法1. 概述KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的核心是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是通过一个next()函数实现，函数本身包含了模式串的局部匹配信息。 作为必须了解的效率算法之">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-07-22T04:20:44.577Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Wiki&#39;s Blog">
+<meta name="twitter:description" content="KMP - 字符串匹配算法1. 概述KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的核心是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是通过一个next()函数实现，函数本身包含了模式串的局部匹配信息。 作为必须了解的效率算法之">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://littlexiaotimpro.github.io/2020/07/22/KMP/">
+
+
+
+
+
+  <title> | Wiki's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!-- 
+    <a href="https://github.com/littlexiaotimpro/littlexiaotimpro.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    -->
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wiki's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://littlexiaotimpro.github.io/2020/07/22/KMP/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wiki">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/ILogo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wiki's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-22T21:02:10+08:00">
+                2020-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="KMP-字符串匹配算法"><a href="#KMP-字符串匹配算法" class="headerlink" title="KMP - 字符串匹配算法"></a>KMP - 字符串匹配算法</h2><h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p>KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的核心是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是通过一个next()函数实现，函数本身包含了模式串的局部匹配信息。</p>
+<p>作为必须了解的效率算法之一，在适用的场景使用合适的算法可以提升程序的执行效率，同时减少不必要的资源损耗 ……</p>
+<h3 id="2-实现原理"><a href="#2-实现原理" class="headerlink" title="2. 实现原理"></a>2. 实现原理</h3><p>如概述中所介绍的，在字符串匹配失败后，尽可能的减少模式串回退的次数，达到快速匹配，如下字符串：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Pattern（模式串），Template（主串）</span><br><span class="line"></span><br><span class="line">Template: abacabcabecdaae</span><br><span class="line"></span><br><span class="line">Pattern : abcabe</span><br></pre></td></tr></table></figure>
+<p>看到上面的示例，一般很容易想到的方法就是遍历循环，然后一个字符一个字符的去匹配，直到匹配到结果后结束，但特殊的情况是，匹配到主串最后一个字符才能出结果（有或没有），如：在字符串<code>aaaaaaaaaaaaaaab</code>，中查找模式串<code>aaab</code>。所以，暴力匹配算法需要看实际需求去使用。</p>
+<h4 id="2-1-模式串前缀表"><a href="#2-1-模式串前缀表" class="headerlink" title="2.1. 模式串前缀表"></a>2.1. 模式串前缀表</h4><ul>
+<li>什么是前缀表？</li>
+<li>为什么需要前缀表？</li>
+</ul>
+<h5 id="a-什么是前缀表？"><a href="#a-什么是前缀表？" class="headerlink" title="a. 什么是前缀表？"></a>a. 什么是前缀表？</h5><p>前缀表，也就概述中提到的 next() 函数所实现的功能得到的结果，用来表示，在匹配失败后模式串相对于原先位置需要移动到什么位置，而把模式串中每一个字符对应的移动位集合起来就构成了一个表，如下：</p>
+<table>
+<thead>
+<tr>
+<th>模式串字符组</th>
+<th>a</th>
+<th>b</th>
+<th>c</th>
+<th>a</th>
+<th>b</th>
+<th>e</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字符索引</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>最长公共前后缀</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>失配对应索引位</td>
+<td>-1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>最长公共前后缀的由来（前缀后缀不含字串本身）：</p>
+<table>
+<thead>
+<tr>
+<th>模式串子串</th>
+<th>前缀</th>
+<th>后缀</th>
+<th>最长公共前后缀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ab</td>
+<td>a</td>
+<td>b</td>
+<td>-</td>
+</tr>
+<tr>
+<td>abc</td>
+<td>a, ab</td>
+<td>c, bc</td>
+<td>-</td>
+</tr>
+<tr>
+<td>abca</td>
+<td>a, ab, abc</td>
+<td>a, ca, bca</td>
+<td>a</td>
+</tr>
+<tr>
+<td>abcab</td>
+<td>a, ab, abc, abca</td>
+<td>b, ab, cab, bcab</td>
+<td>ab</td>
+</tr>
+<tr>
+<td>abcabe</td>
+<td>a, ab, abc, abca, abcab</td>
+<td>e, be, abe, cabe, bcabe</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>如上，很直观的就可以找到模式串各字串的最长公共前后缀。</p>
+<h5 id="b-为什么需要前缀表？"><a href="#b-为什么需要前缀表？" class="headerlink" title="b. 为什么需要前缀表？"></a>b. 为什么需要前缀表？</h5><p>反观暴力匹配算法，在对应字符不匹配时，模式串右移一位，出现许多重复比较的字符，秉着多滑动几位的思想尽可能减少匹配次数，前缀表的衍生规则，(参照，BM算法，待更新 ……)：</p>
+<ul>
+<li>坏字符规则<br>出现的不匹配字符认定为坏字符，开始向右移动，直到匹配到相同字符，若坏字符在模式串中不存在，则可以认为模式串可以滑动至索引为-1的位置，若存在多个坏字符，则以最右边的字符匹配为主，谨防移动过多漏了可能的结果。</li>
+<li>好后缀规则<br>在仅有坏字符规则的前提下，匹配容易出现位移倒退的情况，比如<code>T: aaaaaaaaaaa, P: baa</code>。因此，结合好后缀规则，确定模式串合适的移动位置，实现效率最大化。</li>
+</ul>
+<p>规则的选择标准，一般分别计算好后缀和坏字符规则往后滑动的位数，取大的，作为移动位数，因为两种规则可以独立使用，考虑资源损耗，优先选择好后缀规则。</p>
+<p>KMP算法的前缀表是在BM算法的匹配规则上进行了优化，将规则的选择，改成了使用前缀表，使用中不需要纠结使用哪种规则。</p>
+<p>KMP算法是在失配位置处，判断失配位置之前的模式串子串的最大公共前后缀，若存在，则移动模式串至前后缀匹配处，若不存在，则移动首字符至失配位置，继续判断。</p>
+<h4 id="2-2-具体实现"><a href="#2-2-具体实现" class="headerlink" title="2.2. 具体实现"></a>2.2. 具体实现</h4><p><a href="./KMP.xlsx">KMP匹配规则及实例</a></p>
+<h5 id="a-求解前缀表？"><a href="#a-求解前缀表？" class="headerlink" title="a. 求解前缀表？"></a>a. 求解前缀表？</h5><ul>
+<li>计算模式串各字符对应的最大公共前后缀</li>
+<li>对应字符失配时，对应其子串的最大公共前后缀对应的索引位，索引前缀表整体右移一位，补位-1</li>
+</ul>
+<p>如下，求各字符子串对应的最大公共前后缀</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * KMP 构建前缀表</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> cs     主串的字符序列</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> prefix 前缀表</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> n      模板串的长度</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">patternPrefix</span><span class="params">(CharSequence cs, <span class="keyword">int</span>[] prefix, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">       prefix[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">int</span> cursor = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">       <span class="keyword">while</span> (i &lt; n) &#123;</span><br><span class="line">           <span class="keyword">if</span> (cs.charAt(i) == cs.charAt(cursor)) &#123;</span><br><span class="line">               prefix[i] = ++cursor;</span><br><span class="line">               i++;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="keyword">if</span> (cursor &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                   cursor = prefix[cursor - <span class="number">1</span>];</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   prefix[i] = cursor;</span><br><span class="line">                   i++;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       System.out.println(<span class="string">"最大公共前后缀："</span> + Arrays.toString(prefix));</span><br><span class="line">       next(prefix, n);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>如下，prefix 数组整体右移一位，补位 -1；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 字符时失配对应位置</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> prefix 求得的最大公共前后缀</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> n      前缀表长度</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">next</span><span class="params">(<span class="keyword">int</span>[] prefix, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">       <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 使用本地的数组复制方法也可以实现移动</span></span><br><span class="line"><span class="comment">        * if (n - 1 &gt;= 0) System.arraycopy(prefix, 0, prefix, 1, n - 1);</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">           prefix[i] = prefix[i - <span class="number">1</span>];</span><br><span class="line">       &#125;</span><br><span class="line">       prefix[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line">       System.out.println(<span class="string">"失配对应索引位："</span> + Arrays.toString(prefix));</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="b-字符串匹配"><a href="#b-字符串匹配" class="headerlink" title="b. 字符串匹配"></a>b. 字符串匹配</h5><p>查找模式串在主串中首次出现的位置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 查找模式串首个匹配项</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> tcs    主串序列</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> pcs    模式串序列</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> prefix 前缀表</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> 模式串出现的位置，不存在返回 -1</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">templateFirstMatches</span><span class="params">(CharSequence tcs, CharSequence pcs, <span class="keyword">int</span>[] prefix)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> tLength = tcs.length();</span><br><span class="line">       <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">while</span> (i &lt; tLength) &#123;</span><br><span class="line">           <span class="keyword">if</span> (j == pcs.length()) &#123;</span><br><span class="line">               <span class="keyword">return</span> i - j;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (tcs.charAt(i) == pcs.charAt(j)) &#123;</span><br><span class="line">               i++;</span><br><span class="line">               j++;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               j = prefix[j];</span><br><span class="line">               <span class="keyword">if</span> (j == -<span class="number">1</span>) &#123;</span><br><span class="line">                   i++;</span><br><span class="line">                   j++;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>查找模式串的所有匹配项</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 查找模式串的所有匹配项</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> tcs    主串序列</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> pcs    模式串序列</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> prefix 前缀表</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">templateAllMatches</span><span class="params">(CharSequence tcs, CharSequence pcs, <span class="keyword">int</span>[] prefix)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> tLength = tcs.length();</span><br><span class="line">       <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">       StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">       <span class="keyword">while</span> (i &lt; tLength) &#123;</span><br><span class="line">           <span class="keyword">if</span> (j == pcs.length()) &#123;</span><br><span class="line">               res.append(i - j).append(<span class="string">" "</span>);</span><br><span class="line">               i--;</span><br><span class="line">               j = prefix[j - <span class="number">1</span>];</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (tcs.charAt(i) == pcs.charAt(j)) &#123;</span><br><span class="line">               i++;</span><br><span class="line">               j++;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               j = prefix[j];</span><br><span class="line">               <span class="keyword">if</span> (j == -<span class="number">1</span>) &#123;</span><br><span class="line">                   i++;</span><br><span class="line">                   j++;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       System.out.println(res.length() &lt;= <span class="number">0</span> ? <span class="string">"在主串中未找到模式串！"</span> : <span class="string">"模式串出现的位置："</span> + res.toString());</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="c-完整实现"><a href="#c-完整实现" class="headerlink" title="c. 完整实现"></a>c. 完整实现</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Algorithm</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * KMP 构建前缀表</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> cs     主串的字符序列</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> prefix 前缀表</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> n      模板串的长度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">patternPrefix</span><span class="params">(CharSequence cs, <span class="keyword">int</span>[] prefix, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        prefix[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> cursor = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; n) &#123;</span><br><span class="line">            <span class="keyword">if</span> (cs.charAt(i) == cs.charAt(cursor)) &#123;</span><br><span class="line">                prefix[i] = ++cursor;</span><br><span class="line">                i++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (cursor &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    cursor = prefix[cursor - <span class="number">1</span>];</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    prefix[i] = cursor;</span><br><span class="line">                    i++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"最大公共前后缀："</span> + Arrays.toString(prefix));</span><br><span class="line">        next(prefix, n);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 字符时失配对应位置</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> prefix 求得的最大公共前后缀</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> n      前缀表长度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">next</span><span class="params">(<span class="keyword">int</span>[] prefix, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 使用本地的数组复制方法也可以实现移动</span></span><br><span class="line"><span class="comment">         * if (n - 1 &gt;= 0) System.arraycopy(prefix, 0, prefix, 1, n - 1);</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">            prefix[i] = prefix[i - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        prefix[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line">        System.out.println(<span class="string">"失配对应索引位："</span> + Arrays.toString(prefix));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查找模式串首个匹配项</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tcs    主串序列</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> pcs    模式串序列</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> prefix 前缀表</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 模式串出现的位置，不存在返回 -1</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">templateFirstMatches</span><span class="params">(CharSequence tcs, CharSequence pcs, <span class="keyword">int</span>[] prefix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> tLength = tcs.length();</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; tLength) &#123;</span><br><span class="line">            <span class="keyword">if</span> (j == pcs.length()) &#123;</span><br><span class="line">                <span class="keyword">return</span> i - j;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (tcs.charAt(i) == pcs.charAt(j)) &#123;</span><br><span class="line">                i++;</span><br><span class="line">                j++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                j = prefix[j];</span><br><span class="line">                <span class="keyword">if</span> (j == -<span class="number">1</span>) &#123;</span><br><span class="line">                    i++;</span><br><span class="line">                    j++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查找模式串的所有匹配项</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tcs    主串序列</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> pcs    模式串序列</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> prefix 前缀表</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">templateAllMatches</span><span class="params">(CharSequence tcs, CharSequence pcs, <span class="keyword">int</span>[] prefix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> tLength = tcs.length();</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        StringBuilder res = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">while</span> (i &lt; tLength) &#123;</span><br><span class="line">            <span class="keyword">if</span> (j == pcs.length()) &#123;</span><br><span class="line">                res.append(i - j).append(<span class="string">" "</span>);</span><br><span class="line">                i--;</span><br><span class="line">                j = prefix[j - <span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (tcs.charAt(i) == pcs.charAt(j)) &#123;</span><br><span class="line">                i++;</span><br><span class="line">                j++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                j = prefix[j];</span><br><span class="line">                <span class="keyword">if</span> (j == -<span class="number">1</span>) &#123;</span><br><span class="line">                    i++;</span><br><span class="line">                    j++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(res.length() &lt;= <span class="number">0</span> ? <span class="string">"在主串中未找到模式串！"</span> : <span class="string">"模式串出现的位置："</span> + res.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String pattern = <span class="string">"aa"</span>;</span><br><span class="line">        <span class="keyword">int</span> length = pattern.length();</span><br><span class="line">        <span class="keyword">int</span>[] prefix = <span class="keyword">new</span> <span class="keyword">int</span>[length];</span><br><span class="line">        patternPrefix(pattern, prefix, length);</span><br><span class="line"></span><br><span class="line">        String template = <span class="string">"abacabcaaaaecdaae"</span>;</span><br><span class="line">        System.out.println(<span class="string">"-----------------首个匹配项-------------------"</span>);</span><br><span class="line">        <span class="keyword">int</span> firstIndex = templateFirstMatches(template, pattern, prefix);</span><br><span class="line">        <span class="keyword">if</span> (firstIndex &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"模式串首次出现于："</span> + firstIndex);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"在主串中未找到模式串！"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"-----------------所有匹配项-------------------"</span>);</span><br><span class="line">        templateAllMatches(template, pattern, prefix);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">T: abacabcaaaaecdaae, P: aa</span><br><span class="line">最大公共前后缀：[0, 1]</span><br><span class="line">失配对应索引位：[-1, 0]</span><br><span class="line">-----------------首个匹配项-------------------</span><br><span class="line">模式串首次出现于：7</span><br><span class="line">-----------------所有匹配项-------------------</span><br><span class="line">模式串出现的位置：7 8 9 14 </span><br><span class="line"></span><br><span class="line">T: abacabcabecdaae, P: abcabed</span><br><span class="line">最大公共前后缀：[0, 0, 0, 1, 2, 0, 0]</span><br><span class="line">失配对应索引位：[-1, 0, 0, 0, 1, 2, 0]</span><br><span class="line">-----------------首个匹配项-------------------</span><br><span class="line">在主串中未找到模式串！</span><br><span class="line">-----------------所有匹配项-------------------</span><br><span class="line">在主串中未找到模式串！</span><br></pre></td></tr></table></figure>
+<h3 id="3-时间及空间复杂度"><a href="#3-时间及空间复杂度" class="headerlink" title="3. 时间及空间复杂度"></a>3. 时间及空间复杂度</h3><p>假定主串长度为n，模式串长度为m，那么next数组所占的空间为可以记为m。</p>
+<p>空间复杂度为：O(m)。</p>
+<p>对模式串进行遍历构建next数组，时间复杂度可以估算为m，然后对主串进行循环匹配，时间复杂度为n</p>
+<p>因此算法的时间复杂度：O(m+n)。</p>
+<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>在 JDK 的 String 源码中，有两个方法：</p>
+<ul>
+<li><p>indexOf (String str)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Code shared by String and StringBuffer to do searches. The</span></span><br><span class="line"><span class="comment">    * source is the character array being searched, and the target</span></span><br><span class="line"><span class="comment">    * is the string being searched for.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span>   source       被搜索的字符串.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span>   sourceOffset 资源串的偏移量，默认为0.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span>   sourceCount  资源串的长度.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span>   target       查找的目标字符串.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span>   targetOffset 目标串的偏移量，默认为0.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span>   targetCount  目标串的长度.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span>   fromIndex    资源串中开始查找的位置，默认为0.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(<span class="keyword">char</span>[] source, <span class="keyword">int</span> sourceOffset, <span class="keyword">int</span> sourceCount,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">char</span>[] target, <span class="keyword">int</span> targetOffset, <span class="keyword">int</span> targetCount,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">int</span> fromIndex)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (fromIndex &gt;= sourceCount) &#123;</span><br><span class="line">           <span class="keyword">return</span> (targetCount == <span class="number">0</span> ? sourceCount : -<span class="number">1</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (fromIndex &lt; <span class="number">0</span>) &#123;</span><br><span class="line">           fromIndex = <span class="number">0</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (targetCount == <span class="number">0</span>) &#123;</span><br><span class="line">           <span class="keyword">return</span> fromIndex;</span><br><span class="line">       &#125;</span><br><span class="line">  </span><br><span class="line">       <span class="keyword">char</span> first = target[targetOffset];</span><br><span class="line">       <span class="keyword">int</span> max = sourceOffset + (sourceCount - targetCount);</span><br><span class="line">  </span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = sourceOffset + fromIndex; i &lt;= max; i++) &#123;</span><br><span class="line">           <span class="comment">/* Look for first character. */</span></span><br><span class="line">           <span class="comment">/* 查找资源串中第一个匹配的字符 */</span></span><br><span class="line">           <span class="keyword">if</span> (source[i] != first) &#123;</span><br><span class="line">               <span class="keyword">while</span> (++i &lt;= max &amp;&amp; source[i] != first);</span><br><span class="line">           &#125;</span><br><span class="line">  </span><br><span class="line">           <span class="comment">/* Found first character, now look at the rest of v2 */</span></span><br><span class="line">           <span class="keyword">if</span> (i &lt;= max) &#123;</span><br><span class="line">               <span class="keyword">int</span> j = i + <span class="number">1</span>;</span><br><span class="line">               <span class="keyword">int</span> end = j + targetCount - <span class="number">1</span>;</span><br><span class="line">               <span class="keyword">for</span> (<span class="keyword">int</span> k = targetOffset + <span class="number">1</span>; j &lt; end &amp;&amp; source[j]</span><br><span class="line">                       == target[k]; j++, k++);</span><br><span class="line">  </span><br><span class="line">               <span class="keyword">if</span> (j == end) &#123;</span><br><span class="line">                   <span class="comment">/* Found whole string. */</span></span><br><span class="line">                   <span class="keyword">return</span> i - sourceOffset;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>contains (CharSequence s)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns true if and only if this string contains the specified</span></span><br><span class="line"><span class="comment">    * sequence of char values.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> s the sequence to search for</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> true if this string contains &#123;<span class="doctag">@code</span> s&#125;, false otherwise</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@since</span> 1.5</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(CharSequence s)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> indexOf(s.toString()) &gt; -<span class="number">1</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>实现原理是调用 <code>indexOf(s.toString())</code> 方法，获取目标字符序列的开始位置索引值，与-1比较。</p>
+</li>
+</ul>
+<p>在LeetCode刷题的评判标准是写出的算法的时间及空间的资源损耗占比，其中有些字符串相关的题，有的简单的看一眼就知道用字符串自带的方法就可以解决问题（一行代码即可），但揣摩出题人的想法，能这么简单就给过了，执行一看结果，果然像 shit。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/30/JAVA_ENVIRONMENT_CONFIG/" rel="next" title="编程环境基础配置">
+                <i class="fa fa-chevron-left"></i> 编程环境基础配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/ILogo.png" alt="Wiki">
+            
+              <p class="site-author-name" itemprop="name">Wiki</p>
+              <p class="site-description motion-element" itemprop="description">但求每天多一点</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/littlexiaotimpro" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:littlexiaosi@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://hexo.bootcss.com/docs/" title="Hexo" target="_blank">Hexo</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://theme-next.iissnan.com/" title="NexT" target="_blank">NexT</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#KMP-字符串匹配算法"><span class="nav-number">1.</span> <span class="nav-text">KMP - 字符串匹配算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-概述"><span class="nav-number">1.1.</span> <span class="nav-text">1. 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-实现原理"><span class="nav-number">1.2.</span> <span class="nav-text">2. 实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-模式串前缀表"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1. 模式串前缀表</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#a-什么是前缀表？"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">a. 什么是前缀表？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#b-为什么需要前缀表？"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">b. 为什么需要前缀表？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-具体实现"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2. 具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#a-求解前缀表？"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">a. 求解前缀表？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#b-字符串匹配"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">b. 字符串匹配</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c-完整实现"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">c. 完整实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-时间及空间复杂度"><span class="nav-number">1.3.</span> <span class="nav-text">3. 时间及空间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题外话"><span class="nav-number">1.4.</span> <span class="nav-text">题外话</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wiki</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
