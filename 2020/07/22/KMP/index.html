@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,源码,算法,">
+  <meta name="keywords" content="Java,算法,源码,">
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="1. 概述KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的核心是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是通过一个next()函数实现，函数本身包含了模式串的局部匹配信息。 作为必须了解的效率算法之一，在适用的场景使用合适的">
-<meta name="keywords" content="Java,源码,算法">
+<meta name="keywords" content="Java,算法,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="KMP - 字符串匹配算法">
 <meta property="og:url" content="http://littlexiaotimpro.github.io/2020/07/22/KMP/index.html">
@@ -459,13 +459,13 @@
 <p>如上，很直观的就可以找到模式串各字串的最长公共前后缀。</p>
 <h5 id="b-为什么需要前缀表？"><a href="#b-为什么需要前缀表？" class="headerlink" title="b. 为什么需要前缀表？"></a>b. 为什么需要前缀表？</h5><p>反观暴力匹配算法，在对应字符不匹配时，模式串右移一位，出现许多重复比较的字符，秉着多滑动几位的思想尽可能减少匹配次数，前缀表的衍生规则，(参照，<a href="https://littlexiaotimpro.github.io/2020/08/03/BM/">BM算法</a>)：</p>
 <ul>
-<li>坏字符规则<br>出现的不匹配字符认定为坏字符，开始向右移动，直到匹配到相同字符，若坏字符在模式串中不存在，则可以认为模式串可以滑动至索引为-1的位置，若存在多个坏字符，则以最右边的字符匹配为主，谨防移动过多漏了可能的结果。</li>
+<li>坏字符规则（从左向右）<br>出现的不匹配字符认定为坏字符，开始向右移动，直到匹配到相同字符，若坏字符在模式串中不存在，则可以认为模式串可以滑动至索引为-1的位置，若存在多个坏字符，则以最右边的字符匹配为主，谨防移动过多漏了可能的结果。</li>
 <li>好后缀规则<br>在仅有坏字符规则的前提下，匹配容易出现位移倒退的情况，比如<code>T: aaaaaaaaaaa, P: baa</code>。因此，结合好后缀规则，确定模式串合适的移动位置，实现效率最大化。</li>
 </ul>
 <p>规则的选择标准，一般分别计算好后缀和坏字符规则往后滑动的位数，取大的，作为移动位数，因为两种规则可以独立使用，考虑资源损耗，优先选择好后缀规则。</p>
 <p>KMP算法的前缀表是在BM算法的匹配规则上进行了优化，将规则的选择，改成了使用前缀表，使用中不需要纠结使用哪种规则。</p>
 <p>KMP算法是在失配位置处，判断失配位置之前的模式串子串的最大公共前后缀，若存在，则移动模式串至前后缀匹配处，若不存在，则移动首字符至失配位置，继续判断。</p>
-<h4 id="2-2-具体实现"><a href="#2-2-具体实现" class="headerlink" title="2.2. 具体实现"></a>2.2. 具体实现</h4><p><a href="https://github.com/littlexiaotimpro/learning-and-practicing/blob/master/practice/src/main/java/com/practice/algorithm/KMP.xlsx" target="_blank" rel="noopener">KMP匹配规则及实例</a></p>
+<h4 id="2-2-具体实现"><a href="#2-2-具体实现" class="headerlink" title="2.2. 具体实现"></a>2.2. 具体实现</h4><p>匹配规则及过程参考，<a href="https://github.com/littlexiaotimpro/learning-and-practicing/blob/master/practice/src/main/java/com/practice/algorithm/KMP.xlsx" target="_blank" rel="noopener">KMP匹配规则及实例</a></p>
 <h5 id="a-求解前缀表？"><a href="#a-求解前缀表？" class="headerlink" title="a. 求解前缀表？"></a>a. 求解前缀表？</h5><ul>
 <li>计算模式串各字符对应的最大公共前后缀</li>
 <li>对应字符失配时，对应其子串的最大公共前后缀对应的索引位，索引前缀表整体右移一位，补位-1</li>
@@ -515,9 +515,9 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/源码/" rel="tag"># 源码</a>
-          
             <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
           
         </div>
       

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,源码,算法,">
+  <meta name="keywords" content="Java,算法,源码,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="以下信息摘自 —— 维基百科： 在计算机科学里，Boyer-Moore字符串搜索算法是一种非常高效的字符串搜索算法。它由Bob Boyer和J Strother Moore设计于1977年。此算法仅对搜索目标字符串（关键字）进行预处理，而非被搜索的字符串。 虽然Boyer-Moore算法的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：它不需要对被搜索的字符串中的字符进行">
-<meta name="keywords" content="Java,源码,算法">
+<meta name="description" content="引言以下信息摘自 —— 维基百科： 在计算机科学里，Boyer-Moore字符串搜索算法是一种非常高效的字符串搜索算法。它由Bob Boyer和J Strother Moore设计于1977年。此算法仅对搜索目标字符串（关键字）进行预处理，而非被搜索的字符串。 虽然Boyer-Moore算法 （下文全部缩写为 BM 算法）的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：">
+<meta name="keywords" content="Java,算法,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BM - 字符串匹配算法">
 <meta property="og:url" content="http://littlexiaotimpro.github.io/2020/08/03/BM/index.html">
 <meta property="og:site_name" content="Wiki&#39;s Blog">
-<meta property="og:description" content="以下信息摘自 —— 维基百科： 在计算机科学里，Boyer-Moore字符串搜索算法是一种非常高效的字符串搜索算法。它由Bob Boyer和J Strother Moore设计于1977年。此算法仅对搜索目标字符串（关键字）进行预处理，而非被搜索的字符串。 虽然Boyer-Moore算法的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：它不需要对被搜索的字符串中的字符进行">
+<meta property="og:description" content="引言以下信息摘自 —— 维基百科： 在计算机科学里，Boyer-Moore字符串搜索算法是一种非常高效的字符串搜索算法。它由Bob Boyer和J Strother Moore设计于1977年。此算法仅对搜索目标字符串（关键字）进行预处理，而非被搜索的字符串。 虽然Boyer-Moore算法 （下文全部缩写为 BM 算法）的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2020-08-02T16:00:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BM - 字符串匹配算法">
-<meta name="twitter:description" content="以下信息摘自 —— 维基百科： 在计算机科学里，Boyer-Moore字符串搜索算法是一种非常高效的字符串搜索算法。它由Bob Boyer和J Strother Moore设计于1977年。此算法仅对搜索目标字符串（关键字）进行预处理，而非被搜索的字符串。 虽然Boyer-Moore算法的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：它不需要对被搜索的字符串中的字符进行">
+<meta name="twitter:description" content="引言以下信息摘自 —— 维基百科： 在计算机科学里，Boyer-Moore字符串搜索算法是一种非常高效的字符串搜索算法。它由Bob Boyer和J Strother Moore设计于1977年。此算法仅对搜索目标字符串（关键字）进行预处理，而非被搜索的字符串。 虽然Boyer-Moore算法 （下文全部缩写为 BM 算法）的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：">
 
 
 
@@ -354,14 +354,33 @@
       
 
       
-        <blockquote><p>以下信息摘自 —— 维基百科：</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote><p>以下信息摘自 —— 维基百科：</p>
 <p>在计算机科学里，Boyer-Moore字符串搜索算法是一种非常高效的字符串搜索算法。它由Bob Boyer和J Strother Moore设计于1977年。此算法仅对搜索目标字符串（关键字）进行预处理，而非被搜索的字符串。</p>
-<p>虽然Boyer-Moore算法的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：它不需要对被搜索的字符串中的字符进行逐一比较，而会跳过其中某些部分。</p>
+<p>虽然Boyer-Moore算法 （下文全部缩写为 BM 算法）的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：它不需要对被搜索的字符串中的字符进行逐一比较，而会跳过其中某些部分。</p>
 <p>通常搜索关键字越长，算法速度越快。它的效率来自于这样的事实：对于每一次失败的匹配尝试，算法都能够使用这些信息来排除尽可能多的无法匹配的位置。</p>
 </blockquote>
-<h3 id="字符串匹配规则"><a href="#字符串匹配规则" class="headerlink" title="字符串匹配规则"></a>字符串匹配规则</h3><p>字符串匹配规则，参照KMP文章中的介绍，本文不再赘述。</p>
-<p>在两种独立的匹配规则下，优先选择好后缀匹配规则，因为坏字符匹配容易出现匹配结果失败的情况，同样，实际的算法实现中，可以两种规则并存，模式串移动位数以两种规则中移动位数较大的数为主。</p>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="字符串匹配规则"><a href="#字符串匹配规则" class="headerlink" title="字符串匹配规则"></a>字符串匹配规则</h2><p>传统意义上的字符串匹配方法，一般默认都是从左向右，按顺序匹配，而 BM 算法正好相反，他是按模式串从右向左匹配。</p>
+<h3 id="坏字符规则"><a href="#坏字符规则" class="headerlink" title="坏字符规则"></a>坏字符规则</h3><p>如下示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">主串（T），模式串（P）</span><br><span class="line"></span><br><span class="line">T : CCTACTABBATABACBT</span><br><span class="line"></span><br><span class="line">P1: ABACBT</span><br><span class="line">     ABACBT 右移一位后C字符正好匹配</span><br><span class="line"></span><br><span class="line">P2: TABBAT</span><br><span class="line">          TABBAT 无C字符，模式串整个移动至C字符之后</span><br></pre></td></tr></table></figure>
+<p>从右向左比对相应字符，对于模式串 P1，当找到第一个失配字符（主串的C，模式串的B）时，此时向右移动模式串P1，直到正好可以使得失配位置变为匹配，如示例中描述，正好右移一位。</p>
+<p>移动的特殊的情况在于，如模式串 P2，若主串失配字符不存在于模式串中时，只需要将模式串整个移动至失配字符之后。</p>
+<p>重复从右向左匹配的操作，直到得出结果。</p>
+<h3 id="好后缀规则"><a href="#好后缀规则" class="headerlink" title="好后缀规则"></a>好后缀规则</h3><p>如下示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">主串（T），模式串（P）</span><br><span class="line"></span><br><span class="line">T : CCTACTABBATABACBT</span><br><span class="line"></span><br><span class="line">P1: TABCBTAB</span><br><span class="line">         TABCBTAB 右移5位，此时正好保证后缀 TAB 依旧正常匹配</span><br><span class="line"></span><br><span class="line">T : CCTACTABBATABACBT</span><br><span class="line"></span><br><span class="line">P2: ABBABTAB</span><br><span class="line">          ABBABTAB 好后缀TAB在模式串中只有一个，因此右移模式串，保证模式串前缀中与好后缀的后缀子串的最大匹配比例</span><br><span class="line"></span><br><span class="line">P3: CCBABTAB</span><br><span class="line">            CCBABTAB 好后缀只有一个，并且和模式串不存在公共前后缀，此时直接移动至好后缀之后</span><br></pre></td></tr></table></figure>
+<p>对于模式串 P1，在失配字符（主串的C，模式串的B）后，模式串和主串存在相同的子串 TAB，我们称之为好后缀，此时右移模式串 P1，直到刚好能够保证移动之后，好后缀中能够保持最大的匹配比例。</p>
+<p>最大匹配比例可以理解为，在模式串中不存在和好后缀完全相同的子串时，此时需要考虑模式串的前缀，和好后缀的所有后缀子串，找到其中能够达到的最大子串比例，如模式串 P2。</p>
+<p>移动的特殊的情况在于，如模式串 P3，模式串中与好后缀相同的子串有且仅有一个，并且和模式串不存在公共前后缀，此时直接将整个模式串移动至好后缀之后。</p>
+<p>重复从右向左匹配的操作，直到得出结果。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>实际的算法实现中，两种规则是结合使用的，模式串移动位数以两种规则中移动位数较大的数为主。</p>
+<p>如，<code>bad_char = 3, good_suffix = 5</code> </p>
+<p>坏字符失配时，按坏字符规则可以跳过3个字符，即右移4位。</p>
+<p>而好后缀规则可以跳过5个字符，即移动6位，明显后者的更优，更能为算法提升效益。</p>
+<p>实现需要分两步：</p>
+<ul>
+<li>求得两种规则的移动位数表<br>模式串每一个字符对应的位移值构成的表</li>
+<li>结合位移表实现字符串匹配</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -380,9 +399,9 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/源码/" rel="tag"># 源码</a>
-          
             <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
           
         </div>
       
@@ -577,7 +596,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串匹配规则"><span class="nav-number">1.</span> <span class="nav-text">字符串匹配规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">2.</span> <span class="nav-text">代码实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串匹配规则"><span class="nav-number">2.</span> <span class="nav-text">字符串匹配规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#坏字符规则"><span class="nav-number">2.1.</span> <span class="nav-text">坏字符规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#好后缀规则"><span class="nav-number">2.2.</span> <span class="nav-text">好后缀规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li></ol></div>
             
 
           </div>
