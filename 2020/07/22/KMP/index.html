@@ -357,6 +357,7 @@
         <h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><blockquote><p>KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的核心是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是通过一个next()函数实现，函数本身包含了模式串的局部匹配信息。</p>
 <p>作为必须了解的效率算法之一，在适用的场景使用合适的算法可以提升程序的执行效率，同时减少不必要的资源损耗 ……</p>
 </blockquote>
+<a id="more"></a>
 <h3 id="2-实现原理"><a href="#2-实现原理" class="headerlink" title="2. 实现原理"></a>2. 实现原理</h3><p>如概述中所介绍的，在字符串匹配失败后，尽可能的减少模式串回退的次数，达到快速匹配，如下字符串：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Pattern（模式串），Template（主串）</span><br><span class="line"></span><br><span class="line">Template: abacabcabecdaae</span><br><span class="line"></span><br><span class="line">Pattern : abcabe</span><br></pre></td></tr></table></figure>
 <p>看到上面的示例，一般很容易想到的方法就是遍历循环，然后一个字符一个字符的去匹配，直到匹配到结果后结束，但特殊的情况是，匹配到主串最后一个字符才能出结果（有或没有），如：在字符串<code>aaaaaaaaaaaaaaab</code>，中查找模式串<code>aaab</code>。所以，暴力匹配算法需要看实际需求去使用。</p>

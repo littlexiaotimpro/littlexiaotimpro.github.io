@@ -359,6 +359,7 @@
 <p>虽然Boyer-Moore算法 （下文全部缩写为 BM 算法）的执行时间同样线性依赖于被搜索字符串的大小，但是通常仅为其它算法的一小部分：它不需要对被搜索的字符串中的字符进行逐一比较，而会跳过其中某些部分。</p>
 <p>通常搜索关键字越长，算法速度越快。它的效率来自于这样的事实：对于每一次失败的匹配尝试，算法都能够使用这些信息来排除尽可能多的无法匹配的位置。</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="字符串匹配规则"><a href="#字符串匹配规则" class="headerlink" title="字符串匹配规则"></a>字符串匹配规则</h2><p>传统意义上的字符串匹配方法，一般默认都是从左向右，按顺序匹配，而 BM 算法可以按模式串从右向左匹配，好后缀规则需要确定匹配的后缀子串，因此采用从右向左的匹配方式。</p>
 <h3 id="坏字符规则（从右向左）"><a href="#坏字符规则（从右向左）" class="headerlink" title="坏字符规则（从右向左）"></a>坏字符规则（从右向左）</h3><p>如下示例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">主串（T），模式串（P）</span><br><span class="line"></span><br><span class="line">T : CCTACTABBATABACBT</span><br><span class="line"></span><br><span class="line">P1: ABACBT</span><br><span class="line">     ABACBT 右移一位后C字符正好匹配</span><br><span class="line"></span><br><span class="line">P2: TABBAT</span><br><span class="line">          TABBAT 无C字符，模式串整个移动至C字符之后</span><br></pre></td></tr></table></figure>
