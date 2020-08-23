@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,异常,源码,">
+  <meta name="keywords" content="Java,源码,spring,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="异常类型的处理  引言">
-<meta name="keywords" content="Java,异常,源码">
+<meta name="description" content="概述秉着 “高内聚，低耦合” 的程序设计宗旨，开发框架层出不穷，其中使用广泛的框架之一便是 Spring 全家桶系列，它涵盖了几乎所有的主流程序设计方向，Web、分布式、微服务等等，本章节主要介绍在学习框架前需要了解的知识技术。">
+<meta name="keywords" content="Java,源码,spring">
 <meta property="og:type" content="article">
-<meta property="og:title" content="异常">
-<meta property="og:url" content="http://littlexiaotimpro.github.io/2019/10/15/Exception/index.html">
+<meta property="og:title" content="Spring 框架之初">
+<meta property="og:url" content="http://littlexiaotimpro.github.io/2020/08/22/Spring_Framework/index.html">
 <meta property="og:site_name" content="Wiki&#39;s Blog">
-<meta property="og:description" content="异常类型的处理  引言">
+<meta property="og:description" content="概述秉着 “高内聚，低耦合” 的程序设计宗旨，开发框架层出不穷，其中使用广泛的框架之一便是 Spring 全家桶系列，它涵盖了几乎所有的主流程序设计方向，Web、分布式、微服务等等，本章节主要介绍在学习框架前需要了解的知识技术。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-14T16:00:00.000Z">
+<meta property="og:image" content="http://littlexiaotimpro.github.io/themes/next/source/images/classloader.png">
+<meta property="og:updated_time" content="2020-08-21T16:00:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="异常">
-<meta name="twitter:description" content="异常类型的处理  引言">
+<meta name="twitter:title" content="Spring 框架之初">
+<meta name="twitter:description" content="概述秉着 “高内聚，低耦合” 的程序设计宗旨，开发框架层出不穷，其中使用广泛的框架之一便是 Spring 全家桶系列，它涵盖了几乎所有的主流程序设计方向，Web、分布式、微服务等等，本章节主要介绍在学习框架前需要了解的知识技术。">
+<meta name="twitter:image" content="http://littlexiaotimpro.github.io/themes/next/source/images/classloader.png">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://littlexiaotimpro.github.io/2019/10/15/Exception/">
+  <link rel="canonical" href="http://littlexiaotimpro.github.io/2020/08/22/Spring_Framework/">
 
 
 
 
 
-  <title>异常 | Wiki's Blog</title>
+  <title>Spring 框架之初 | Wiki's Blog</title>
   
 
 
@@ -265,7 +267,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://littlexiaotimpro.github.io/2019/10/15/Exception/">
+    <link itemprop="mainEntityOfPage" href="http://littlexiaotimpro.github.io/2020/08/22/Spring_Framework/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wiki">
@@ -282,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">异常</h1>
+          <h1 class="post-title" itemprop="name headline">Spring 框架之初</h1>
         
 
         <div class="post-meta">
@@ -294,8 +296,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-15T00:00:00+08:00">
-                2019-10-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-22T00:00:00+08:00">
+                2020-08-22
               </time>
             
 
@@ -354,9 +356,36 @@
       
 
       
-        <blockquote><p>异常类型的处理</p>
-</blockquote>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>秉着 “高内聚，低耦合” 的程序设计宗旨，开发框架层出不穷，其中使用广泛的框架之一便是 Spring 全家桶系列，它涵盖了几乎所有的主流程序设计方向，Web、分布式、微服务等等，本章节主要介绍在学习框架前需要了解的知识技术。<br><a id="more"></a></p>
+<p>框架学习主要分为几个小章节：</p>
+<ul>
+<li>Spring 框架介绍</li>
+<li>类加载机制和双亲委派模型</li>
+<li>SPI 机制</li>
+<li>IOC 容器</li>
+</ul>
+<h3 id="什么是-Spring"><a href="#什么是-Spring" class="headerlink" title="什么是 Spring"></a>什么是 Spring</h3><p>Spring 框架是 Java 平台的一个开源的全栈（Full-stack）应用程序框架和控制反转容器实现，一般被直接称为 Spring。该框架的一些核心功能理论上可用于任何 Java 应用，但 Spring 还为基于Java企业版平台构建的 Web 应用提供了大量的拓展支持。虽然 Spring 没有直接实现任何的编程模型，但它已经在 Java 社区中广为流行，基本上完全代替了企业级JavaBeans（EJB）模型。</p>
+<p>轻量级的特性使得框架将核心层实与应用层的实现逻辑独立开来，核心层提供关键的对象容器管理实现，应用层包括 Web、AOP、JDBC、Transaction ……，每一个具体的模块都是一个独立可运行的应用。</p>
+<p>官网：<a href="https://spring.io/projects/spring-framework" target="_blank" rel="noopener">https://spring.io/projects/spring-framework</a></p>
+<p>框架核心层提供了 <code>org.springframework.beans</code> 和 <code>org.springframework.context</code> 两个关键包，前者核心接口 <code>BeanFactory</code>，后者核心接口 <code>ApplicationContext</code>，这两个核心接口在IOC容器管理中起了非常重要的作用，之后会详细介绍。</p>
+<h3 id="类加载机制和双亲委派模型"><a href="#类加载机制和双亲委派模型" class="headerlink" title="类加载机制和双亲委派模型"></a>类加载机制和双亲委派模型</h3><p>了解类加载机制，在类加载过程中，加载器是如何工作的，加载过程又是怎样的。</p>
+<h4 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h4><p>通过一个类的全限定类名来获取描述此类的二进制文件流，在Java虚拟机外部程序中，实现加载此二进制字节流的过程称为类加载过程，该模块称之为类加载器。</p>
+<p>只有被同一个类加载器加载的类才有可能相等，相同字节码，被不同类加载器加载得到的类是不相等的。</p>
+<p>类加载过程：加载 -&gt; 连接【验证 -&gt; 准备 -&gt; 解析】-&gt; 初始化 -&gt; 使用 -&gt; 卸载</p>
+<p>类加载划分：</p>
+<ul>
+<li><code>Bootstrap ClassLoader</code><br>启动类加载器，加载JDK：%JAVA_HOME%\lib 目录下的类</li>
+<li><code>Extension ClassLoader</code><br>扩展类加载器，加载JDK：%JAVA_HOME\lib\ext 目录下的类</li>
+<li><code>Application ClassLoader</code><br>应用程序类加载器，加载用户指定路径下的类</li>
+<li><code>User ClassLoader</code><br>自定义加载器，加载指定路径下的类</li>
+</ul>
+<p>简单的测试代码，验证不同类加载的类不相等：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义一个类加载器，实现ClassLoader类，实例化后判断是否为当前类实例对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelfClassLoaderTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLoader</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        ClassLoader myClassLoader = <span class="keyword">new</span> ClassLoader() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Class&lt;?&gt; loadClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">                <span class="comment">// 截取全限定类名的中的class类名</span></span><br><span class="line">                String simpleClassName = name.substring(name.lastIndexOf(<span class="string">"."</span>) + <span class="number">1</span>) + <span class="string">".class"</span>;</span><br><span class="line">                InputStream resource = getClass().getResourceAsStream(simpleClassName);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 自定义类加载器无法加载资源，由父类加载器加载</span></span><br><span class="line">                <span class="keyword">if</span> (resource == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">super</span>.loadClass(name);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[resource.available()];</span><br><span class="line">                    resource.read(bytes);</span><br><span class="line">                    <span class="keyword">return</span> defineClass(name,bytes,<span class="number">0</span>,bytes.length);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        Object instance = myClassLoader.loadClass(<span class="string">"com.practice.classloader.SelfClassLoaderTest"</span>).newInstance();</span><br><span class="line">        System.out.println(instance.getClass());</span><br><span class="line">        System.out.println(instance <span class="keyword">instanceof</span> SelfClassLoaderTest);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出结果</span></span><br><span class="line"><span class="comment">// class com.practice.classloader.SelfClassLoaderTest</span></span><br><span class="line"><span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>由上述代码运行结果可知，自定义类加载器加载的实例对象与其他类加载器加载的类不相等。</p>
+<h4 id="双亲加载模型"><a href="#双亲加载模型" class="headerlink" title="双亲加载模型"></a>双亲加载模型</h4><p>因为类加载器的种类较多，所以为了使各加载器之间能够协调工作，双亲委派模型便诞生了，他的核心加载过程便是将类加载的过程交由父类加载器进行加载，若父类加载器无法加载类时，才交由自己的类加载器进行加载，若都无法加载，则会抛出 <code>ClassNotFoundException</code>。</p>
+<p>如图：</p>
+<p><img src="/themes/next/source/images/classloader.png" alt="双亲委派模型图"></p>
+
       
     </div>
     
@@ -375,9 +404,9 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/异常/" rel="tag"># 异常</a>
-          
             <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
           
         </div>
       
@@ -390,8 +419,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/05/Collection/" rel="next" title="集合类源码">
-                <i class="fa fa-chevron-left"></i> 集合类源码
+              <a href="/2020/08/09/Contents/" rel="next" title="文章总集">
+                <i class="fa fa-chevron-left"></i> 文章总集
               </a>
             
           </div>
@@ -399,10 +428,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/05/17/Thread/" rel="prev" title="线程">
-                线程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -576,7 +601,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-Spring"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 Spring</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载机制和双亲委派模型"><span class="nav-number">1.2.</span> <span class="nav-text">类加载机制和双亲委派模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类加载机制"><span class="nav-number">1.2.1.</span> <span class="nav-text">类加载机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双亲加载模型"><span class="nav-number">1.2.2.</span> <span class="nav-text">双亲加载模型</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
