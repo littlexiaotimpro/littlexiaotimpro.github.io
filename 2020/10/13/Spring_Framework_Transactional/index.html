@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/ILogow.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/iam.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/iam.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/ILogo.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,源码,Spring,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述本文主要对数据库的事务进行一个介绍，包括，事务特性、事务属性、事务传播行为等，旨在程序开发过程中，如何声明一个事务，如何对事务进行优化等。">
+<meta name="keywords" content="Java,源码,Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring 事务管理">
+<meta property="og:url" content="http://littlexiaotimpro.github.io/2020/10/13/Spring_Framework_Transactional/index.html">
+<meta property="og:site_name" content="Wiki&#39;s Blog">
+<meta property="og:description" content="概述本文主要对数据库的事务进行一个介绍，包括，事务特性、事务属性、事务传播行为等，旨在程序开发过程中，如何声明一个事务，如何对事务进行优化等。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://littlexiaotimpro.github.io/images/transaction-rollback.PNG">
+<meta property="og:image" content="http://littlexiaotimpro.github.io/images/transaction-rollback-done.PNG">
+<meta property="og:image" content="http://littlexiaotimpro.github.io/images/transaction-rollback.PNG">
+<meta property="og:updated_time" content="2020-10-12T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring 事务管理">
+<meta name="twitter:description" content="概述本文主要对数据库的事务进行一个介绍，包括，事务特性、事务属性、事务传播行为等，旨在程序开发过程中，如何声明一个事务，如何对事务进行优化等。">
+<meta name="twitter:image" content="http://littlexiaotimpro.github.io/images/transaction-rollback.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://littlexiaotimpro.github.io/2020/10/13/Spring_Framework_Transactional/">
+
+
+
+
+
+  <title>Spring 事务管理 | Wiki's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!-- 
+    <a href="https://github.com/littlexiaotimpro/littlexiaotimpro.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    -->
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wiki's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://littlexiaotimpro.github.io/2020/10/13/Spring_Framework_Transactional/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wiki">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/ILogo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wiki's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring 事务管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-13T00:00:00+08:00">
+                2020-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/notebook/" itemprop="url" rel="index">
+                    <span itemprop="name">notebook</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文主要对数据库的事务进行一个介绍，包括，事务特性、事务属性、事务传播行为等，旨在程序开发过程中，如何声明一个事务，如何对事务进行优化等。<br><a id="more"></a></p>
+<h2 id="事务特性"><a href="#事务特性" class="headerlink" title="事务特性"></a>事务特性</h2><p>事务的基本基本特性主要分为如下四种：</p>
+<ul>
+<li>原子性<br>事务操作逻辑，必须全部成功完成，一个出错，则整个事务回滚</li>
+<li>一致性<br>事务操作的结果必须和事务操作前的总量一致</li>
+<li>隔离性<br>事务与事务之间相互隔离</li>
+<li>持久性<br>事务一旦提交，那么修改就是永久的</li>
+</ul>
+<h2 id="事务属性"><a href="#事务属性" class="headerlink" title="事务属性"></a>事务属性</h2><h3 id="事务的超时属性（timeout）"><a href="#事务的超时属性（timeout）" class="headerlink" title="事务的超时属性（timeout）"></a>事务的超时属性（timeout）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@Transactional</span>(timeout = <span class="number">3</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">checkTimeOut</span><span class="params">(String logNo)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 验证事务超时属性，设置当前线程睡眠时间为 5s</span></span><br><span class="line">        Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> logBeanDAO.findOperatorByKey(logNo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过在需要添加事务方法上添加 <code>@Transactional</code> 注解，并设置超时（timeout）属性值（设置的 3s）。</p>
+<p>为事务添加超时属性，若事务超时未完成，则会抛出事务超时异常 <code>org.springframework.transaction.TransactionTimedOutException</code>。</p>
+<h3 id="事务的只读属性（readOnly）"><a href="#事务的只读属性（readOnly）" class="headerlink" title="事务的只读属性（readOnly）"></a>事务的只读属性（readOnly）</h3><p>用于实现事务优化，对一些只读操作提高其查询效率。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@Transactional</span>(readOnly = <span class="keyword">true</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">checkReadOnly</span><span class="params">(String logNo)</span> </span>&#123;</span><br><span class="line">    LogBean logBean = <span class="keyword">new</span> LogBean();</span><br><span class="line">    logBean.setOperator(<span class="string">"test"</span>);</span><br><span class="line">    logBean.setOperation(<span class="string">"junit-test"</span>);</span><br><span class="line">    logBean.setContent(<span class="string">"测试事务属性"</span>);</span><br><span class="line">    logBeanDAO.insertOne(logBean);</span><br><span class="line">    <span class="keyword">return</span> logBeanDAO.findOperatorByKey(logNo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过在需要添加事务方法上添加 <code>@Transactional</code> 注解，并设置只读（readOnly）属性值（默认为 false）。</p>
+<p>如上，在只读事务中添加了对数据库修改的操作逻辑，此时会抛异常 <code>org.springframework.dao.TransientDataAccessResourceException</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.dao.TransientDataAccessResourceException:</span><br><span class="line">### Error updating database.  Cause: java.sql.SQLException: Connection is read-only. Queries leading to data modification are not allowed</span><br><span class="line">### The error may exist in com/practice/test/dao/LogBeanDAO.xml</span><br><span class="line">### The error may involve com.practice.test.dao.LogBeanDAO.insertOne-Inline</span><br><span class="line">### The error occurred while setting parameters</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>原因就是在只读连接中存在数据修改操作，这是不允许的。</p>
+<h3 id="事务回滚属性"><a href="#事务回滚属性" class="headerlink" title="事务回滚属性"></a>事务回滚属性</h3><p>事务回滚，默认只针对非受检异常（或，运行时异常），对于受检异常（或，编译时异常），如果需要实现事务回滚则需要配置回滚属性，如下：</p>
+<ul>
+<li>rollbackFor<br>对于哪些异常需要回滚，能够接受一个异常类型数组（Class&lt;? extends Throwable&gt;[]）</li>
+<li>rollbackForClassName<br>功能同上，只不过接收类型为一个字符串数组，值为对应异常的全限定类名（String[]）</li>
+<li>noRollbackFor<br>指定哪些类型的异常不进行事务回滚，接收一个异常类型数组（Class&lt;? extends Throwable&gt;[]）</li>
+<li>noRollbackForClassName<br>功能同上，只不过接收类型为一个字符串数组，值为对应异常的全限定类名（String[]）</li>
+</ul>
+<p>默认属性下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">updateOne</span><span class="params">(String logNo, String operator)</span> <span class="keyword">throws</span> FileNotFoundException </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = logBeanDAO.updateOne(logNo, operator);</span><br><span class="line">    FileInputStream fileInputStream = <span class="keyword">new</span> FileInputStream(<span class="string">"D://test.test"</span>);</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>java.io.FileNotFoundException: D:\test.test (系统找不到指定的文件。)</code></p>
+<p>如上抛出的异常为编译时异常，所以运行中不会对事务进行回滚操作，对于 <code>logno = 720</code> 这条数据，在异常过程中并没有回滚，如下图：</p>
+<p><img src="/images/transaction-rollback.PNG" alt="事务异常操作结果"></p>
+<h4 id="验证-rollbackFor"><a href="#验证-rollbackFor" class="headerlink" title="验证 rollbackFor"></a>验证 rollbackFor</h4><p>数据还原并修改属性后：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@Transactional</span>(rollbackFor = &#123;FileNotFoundException.class&#125;)</span><br><span class="line"><span class="comment">//@Transactional(rollbackForClassName = &#123;"java.io.FileNotFoundException"&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">updateOne</span><span class="params">(String logNo, String operator)</span> <span class="keyword">throws</span> FileNotFoundException </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = logBeanDAO.updateOne(logNo, operator);</span><br><span class="line">    FileInputStream fileInputStream = <span class="keyword">new</span> FileInputStream(<span class="string">"D://test.test"</span>);</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 <code>logno = 720</code> 这条数据，在异常过程中数据回滚，如下图：</p>
+<p><img src="/images/transaction-rollback-done.PNG" alt="事务异常操作结果"></p>
+<h4 id="验证-noRollbackFor"><a href="#验证-noRollbackFor" class="headerlink" title="验证 noRollbackFor"></a>验证 noRollbackFor</h4><p>修改属性如下，将算数异常设置为不回滚：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@Transactional</span>(noRollbackFor = &#123;ArithmeticException.class&#125;)</span><br><span class="line"><span class="comment">//@Transactional(noRollbackForClassName = &#123;"java.lang.ArithmeticException"&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">checkNoRollBackFor</span><span class="params">(String logNo, String operator)</span> <span class="keyword">throws</span> FileNotFoundException </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = logBeanDAO.updateOne(logNo, operator);</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>/<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 <code>logno = 720</code> 这条数据，在异常过程中数据未发生回滚，如下图：</p>
+<p><img src="/images/transaction-rollback.PNG" alt="事务异常操作结果"></p>
+<h3 id="事务隔离级别（isolation）"><a href="#事务隔离级别（isolation）" class="headerlink" title="事务隔离级别（isolation）"></a>事务隔离级别（isolation）</h3><p>隔离级别枚举类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Isolation &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 默认事务级别</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	DEFAULT(TransactionDefinition.ISOLATION_DEFAULT),</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 读未提交</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	READ_UNCOMMITTED(TransactionDefinition.ISOLATION_READ_UNCOMMITTED),</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 读已提交</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	READ_COMMITTED(TransactionDefinition.ISOLATION_READ_COMMITTED),</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 可重复读</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	REPEATABLE_READ(TransactionDefinition.ISOLATION_REPEATABLE_READ),</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 串行化</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	SERIALIZABLE(TransactionDefinition.ISOLATION_SERIALIZABLE);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> value;</span><br><span class="line">	Isolation(<span class="keyword">int</span> value) &#123;</span><br><span class="line">		<span class="keyword">this</span>.value = value;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">value</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.value;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="事务存在的并发问题"><a href="#事务存在的并发问题" class="headerlink" title="事务存在的并发问题"></a>事务存在的并发问题</h4><p>在事务操作过程中容易出现的并发问题：</p>
+<ul>
+<li><p>脏读<br>最应该避免的错误读取，指在两个事务同时进行的过程中，事务一进行读取，事务二进行修改<br>事务二修改了数据之后（未提交），事务一读取到了最新修改的数据<br>事务二进行了数据回滚，此时事务一读取到的新数据就成了脏（无效）数据，如果用这个数据进行后续的逻辑操作，绝对是错误的。</p>
+</li>
+<li><p>不可重复读<br>指同一个事务在两次相同读取的操作下得到的结果不一致<br>事务一读取了初始数据之后<br>事务二进行了数据修改<br>事务一再次读取得到的是修改之后的数据，和第一次读取的不一样</p>
+</li>
+<li><p>幻读<br>指事务读取过程中的数据比实际的多（或少），原因在于<br>事务一查询某张表的部分数据<br>事务二进行了数据表的数据修改，新增或删除了部分数据<br>事务一再次读取时，发现多（或少）了一些数据</p>
+</li>
+</ul>
+<h4 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h4><p>MySQL 可以通过 <code>SELECT @@transaction_isolation</code>（早期版本的可以使用 <code>SELECT @@tx_isolation</code>）命令查看当前数据库的事务隔离级别。</p>
+<h2 id="事务的实现原理"><a href="#事务的实现原理" class="headerlink" title="事务的实现原理"></a>事务的实现原理</h2><p>需要注意，通过方法代理的方式实现事务管理，对于private的修饰的方法添加 <code>@Transactional</code> 并不能实现事务管理，因为无论是JDk动态代理（接口实现的方式），还是CGLib动态代理（子类继承的方式）都是针对的public方法。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/16/Contents/" rel="next" title="文章总集">
+                <i class="fa fa-chevron-left"></i> 文章总集
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/ILogo.png" alt="Wiki">
+            
+              <p class="site-author-name" itemprop="name">Wiki</p>
+              <p class="site-description motion-element" itemprop="description">但求每天多一点</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/littlexiaotimpro" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:littlexiaosi@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://hexo.bootcss.com/docs/" title="Hexo" target="_blank">Hexo</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://theme-next.iissnan.com/" title="NexT" target="_blank">NexT</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务特性"><span class="nav-number">2.</span> <span class="nav-text">事务特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务属性"><span class="nav-number">3.</span> <span class="nav-text">事务属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#事务的超时属性（timeout）"><span class="nav-number">3.1.</span> <span class="nav-text">事务的超时属性（timeout）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务的只读属性（readOnly）"><span class="nav-number">3.2.</span> <span class="nav-text">事务的只读属性（readOnly）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务回滚属性"><span class="nav-number">3.3.</span> <span class="nav-text">事务回滚属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#验证-rollbackFor"><span class="nav-number">3.3.1.</span> <span class="nav-text">验证 rollbackFor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证-noRollbackFor"><span class="nav-number">3.3.2.</span> <span class="nav-text">验证 noRollbackFor</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务隔离级别（isolation）"><span class="nav-number">3.4.</span> <span class="nav-text">事务隔离级别（isolation）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#事务存在的并发问题"><span class="nav-number">3.4.1.</span> <span class="nav-text">事务存在的并发问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务的隔离级别"><span class="nav-number">3.4.2.</span> <span class="nav-text">事务的隔离级别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务的实现原理"><span class="nav-number">4.</span> <span class="nav-text">事务的实现原理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wiki</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
